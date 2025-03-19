@@ -18,16 +18,18 @@ TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
 ALERT_EMAIL = os.getenv("ALERT_EMAIL")
 ALERT_PHONE = os.getenv("ALERT_PHONE")
 
+# Function to send email alert
 def send_email_alert(message):
     sg = sendgrid.SendGridAPIClient(SENDGRID_API_KEY)
     email = Mail(
-        from_email="kaviyashree2673@example.com",
+        from_email="your-email@example.com",
         to_emails=ALERT_EMAIL,
         subject="Security Alert",
         plain_text_content=message
     )
     sg.send(email)
 
+# Function to send SMS alert
 def send_sms_alert(message):
     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
     client.messages.create(
@@ -36,23 +38,29 @@ def send_sms_alert(message):
         to=ALERT_PHONE
     )
 
-@app.route("/predict", methods=["GET", "POST"])
+@app.route("/predict", methods=["POST"])
 def predict():
-    if request.method == "GET":
-        return jsonify({"message": "GET request received"}), 200
-
     try:
-        data = request.json
-        features = np.array(data["features"]).reshape(1, -1)
+        data = request.json  # Parse JSON request body
+
+        # Check if the data is a list or a dictionary
+        if isinstance(data, list):
+            data = data[0]  # Extract first element if it's a list
+
+        # Convert input data into a NumPy array
+        features = np.array(list(data.values())).reshape(1, -1)
+
+        # Get model prediction
         prediction = model.predict(features)
 
-        if prediction[0] == -1:  # Anomaly detected
+        if prediction[0] == -1:  # If anomaly detected
             alert_message = "Suspicious activity detected!"
             send_email_alert(alert_message)
             send_sms_alert(alert_message)
             return jsonify({"status": "alert", "message": alert_message}), 200
         
         return jsonify({"status": "normal", "message": "No threats detected"}), 200
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
