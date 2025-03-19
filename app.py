@@ -12,9 +12,9 @@ app = Flask(__name__)
 model = joblib.load("model.pkl")
 
 # Load environment variables (for security)
-SENDGRID_API_KEY = AC84e2d75670ff64f058b87794cde8adef
-TWILIO_ACCOUNT_SID = AC43929220433ca57bec69edce522c5a8d
-TWILIO_AUTH_TOKEN = 524e6e01b962dc4851fe1da43da7eaee
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
 ALERT_EMAIL = os.getenv("ALERT_EMAIL")
 ALERT_PHONE = os.getenv("ALERT_PHONE")
 
