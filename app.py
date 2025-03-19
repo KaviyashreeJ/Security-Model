@@ -12,9 +12,9 @@ app = Flask(__name__)
 model = joblib.load("model.pkl")
 
 # Load environment variables (for security)
-SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
-TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
-TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+SENDGRID_API_KEY = AC84e2d75670ff64f058b87794cde8adef
+TWILIO_ACCOUNT_SID = AC43929220433ca57bec69edce522c5a8d
+TWILIO_AUTH_TOKEN = 524e6e01b962dc4851fe1da43da7eaee
 ALERT_EMAIL = os.getenv("ALERT_EMAIL")
 ALERT_PHONE = os.getenv("ALERT_PHONE")
 
@@ -22,7 +22,7 @@ ALERT_PHONE = os.getenv("ALERT_PHONE")
 def send_email_alert(message):
     sg = sendgrid.SendGridAPIClient(SENDGRID_API_KEY)
     email = Mail(
-        from_email="your-email@example.com",
+        from_email="kaviyashreejawahar@gmail.com",
         to_emails=ALERT_EMAIL,
         subject="Security Alert",
         plain_text_content=message
@@ -34,7 +34,7 @@ def send_sms_alert(message):
     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
     client.messages.create(
         body=message,
-        from_="+91 9940141132",  # Your Twilio number
+        from_="+91 9940141132",  # My Twilio number
         to=ALERT_PHONE
     )
 
