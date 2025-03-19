@@ -36,8 +36,11 @@ def send_sms_alert(message):
         to=ALERT_PHONE
     )
 
-@app.route("/predict", methods=["POST"])
+@app.route("/predict", methods=["GET", "POST"])
 def predict():
+    if request.method == "GET":
+        return jsonify({"message": "GET request received"}), 200
+
     try:
         data = request.json
         features = np.array(data["features"]).reshape(1, -1)
@@ -53,32 +56,9 @@ def predict():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
-from flask import Flask, request, jsonify
-
-app = Flask(__name__)
-
-@app.route('/predict', methods=['POST'])
-def predict():
-    data = request.get_json()
-    return jsonify({"message": "Prediction received", "data": data})
-
-@app.route("/", methods=["GET"])  # This will block POST requests
-def home():
-    return "Welcome to Security Model API"
-
-@app.route("/predict", methods=["POST"])  # Make sure POST is allowed
-def predict():
-    data = request.json
-    return jsonify({"message": "Prediction success", "input": data})
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
-    
 @app.route('/')
 def home():
     return "Flask API is running!"
 
+if __name__ == "__main__":
+    app.run(debug=True)
