@@ -65,6 +65,16 @@ def predict():
     data = request.get_json()
     return jsonify({"message": "Prediction received", "data": data})
 
+@app.route("/", methods=["GET"])  # This will block POST requests
+def home():
+    return "Welcome to Security Model API"
+
+@app.route("/predict", methods=["POST"])  # Make sure POST is allowed
+def predict():
+    data = request.json
+    return jsonify({"message": "Prediction success", "input": data})
+
+
 if __name__ == '__main__':
     app.run(debug=True)
     
