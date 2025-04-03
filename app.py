@@ -58,7 +58,7 @@ def send_sms_alert(message):
         client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
         message = client.messages.create(
             body=message,
-            from_="+91 9940141132",  # Twilio number
+            from_=TWILIO_PHONE_NUMBER,  # Twilio number
             to=ALERT_PHONE
         )
         logging.info(f"SMS sent successfully: {message.sid}")
